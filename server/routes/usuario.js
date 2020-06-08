@@ -7,10 +7,13 @@ const _ = require('underscore');
 
 const Usuario = require('../models/usuario');
 
+const { verificaToken, verificaAdminRole } = require('../middlewares/authorization');
+
 const app = express();
 
 
-app.get('/usuario', function (req, res) {
+app.get('/usuario', verificaToken, function (req, res) {
+    
     const desde = Number(req.query.desde || 0)  ;
     const limite = Number(req.query.limite || 5)  ;
     const query = { estado :true };
@@ -36,7 +39,7 @@ app.get('/usuario', function (req, res) {
 
 })
   
-  app.post('/usuario', function (req, res) {
+  app.post('/usuario', [ verificaToken, verificaAdminRole ], function (req, res) {
 
     const body = req.body;
       const usuario = new Usuario({
@@ -59,7 +62,7 @@ app.get('/usuario', function (req, res) {
       });
   })
   
-  app.put('/usuario/:id', function (req, res) {
+  app.put('/usuario/:id', [ verificaToken, verificaAdminRole], function (req, res) {
       const id = req.params.id;
       const body = _.pick(req.body, ['nombre','email','img','role','estado']);
 
@@ -77,7 +80,7 @@ app.get('/usuario', function (req, res) {
       });      
   })
   
-  app.delete('/usuario/permanente/:id', function (req, res) {
+  app.delete('/usuario/permanente/:id', [ verificaToken, verificaAdminRole], function (req, res) {
         const id = req.params.id;
         Usuario.findByIdAndRemove(id,(err, usuarioDB)=>{
             if (err){
@@ -101,7 +104,7 @@ app.get('/usuario', function (req, res) {
         });       
   })
 
-  app.delete('/usuario/:id', function (req, res) {
+  app.delete('/usuario/:id', verificaToken, function (req, res) {
     const id = req.params.id;
     const body = { 
         estado: false

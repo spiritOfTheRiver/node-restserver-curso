@@ -90,7 +90,7 @@ app.get('/usuario', verificaToken, function (req, res) {
                 });
             }
             if ( !usuarioDB ){
-                res.status(404).json({
+                return res.status(404).json({
                     ok: false,
                     err: {
                         message: 'Usuario no encontrado'
@@ -118,13 +118,13 @@ app.get('/usuario', verificaToken, function (req, res) {
           });
       }
       if ( !usuarioDB ){
-        res.status(404).json({
+        return res.status(404).json({
             ok: false,
             err: {
                 message: 'Usuario no encontrado'
             }                    
         });
-    }
+      }
       res.json({
           ok: true,
           usuario: usuarioDB

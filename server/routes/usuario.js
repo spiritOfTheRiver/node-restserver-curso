@@ -77,7 +77,7 @@ app.get('/usuario', verificaToken, function (req, res) {
             ok: true,
             usuario: usuarioDB
         })
-      });      
+      });
   })
   
   app.delete('/usuario/permanente/:id', [ verificaToken, verificaAdminRole], function (req, res) {
